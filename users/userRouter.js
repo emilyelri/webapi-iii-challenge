@@ -7,7 +7,7 @@ router.post('/', validateUser, (req, res) => {
     const newUser = req.body;
     userDB.insert(newUser)
     .then(user => {
-        res.status(200).json(user);
+        res.status(201).json(user);
     })
     .catch(err => {
         console.log("Error!", err);
@@ -16,10 +16,10 @@ router.post('/', validateUser, (req, res) => {
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
-    const newPost = req.body;
+    const newPost = {...req.body, user_id: req.params.id};
     postDB.insert(newPost)
     .then(post => {
-        res.status(200).json(post);
+        res.status(201).json(post);
     })
     .catch(err => {
         console.log("Error!", err);
@@ -118,16 +118,6 @@ function validateUser(req, res, next) {
 function validatePost(req, res, next) {
     !req.body && res.status(400).json({ message: "missing post data" });
     !req.body.text && res.status(400).json({ message: "missing required text field" });
-    // if (req.body) {
-    //     if (req.body.text) {
-    //         next ();
-    //     } else {
-    //         res.status(400).json({ message: "missing required text field"  })
-    //     }
-    // } else {
-    //     res.status(400).json({ message: "missing post data" })
-    // }
-
     next();
 };
 
