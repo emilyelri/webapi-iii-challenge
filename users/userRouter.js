@@ -77,7 +77,7 @@ router.delete('/:id', validateUserId, (req, res) => {
     })
 });
 
-router.put('/:id', validateUserId, (req, res) => {
+router.put('/:id', validateUserId, validatePost, (req, res) => {
     const id = req.params.id;
     const newPost = req.body;
     userDB.update(id, newPost)
@@ -89,7 +89,6 @@ router.put('/:id', validateUserId, (req, res) => {
         res.status(500).json({ error: "server error: user update failed"});
     });
 });
-
 
 //custom middleware
 function validateUserId(req, res, next) {
